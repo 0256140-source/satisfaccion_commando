@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Satisfacción Commando</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .mobile-container {
+            width: 100%;
+            max-width: 450px;
+            background-color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            padding: 40px 24px 30px;
+            background-color: white;
+            position: relative;
+            z-index: 10;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            font-weight: 800;
+            line-height: 1.1;
+            color: #000;
+            margin-top: 10px;
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: -30px;
+            left: 0;
+            right: 0;
+            height: 31px;
+            background: white;
+            border-bottom-left-radius: 40px;
+            border-bottom-right-radius: 40px;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .gradient-banner {
+            background-color: #FF9082; 
+            padding: 50px 24px 20px;
+            color: white;
+            position: relative;
+            z-index: 1;
+        }
+
+        .questions-container {
+            background-color: #FF9082;
+            padding: 0 16px 40px;
+            margin-top: -1px;
+        }
+
+        .card {
+            background: #f1f1f1; 
+            border-radius: 32px;
+            padding: 24px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .question-label {
+            display: block;
+            font-weight: 800;
+            margin-bottom: 20px;
+            font-size: 18px;
+            color: #111;
+            text-align: left;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .option-btn {
+            background: transparent;
+            border: 1px solid #d1d5db;
+            padding: 16px 10px;
+            border-radius: 18px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: 600;
+            color: #4b5563;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .option-btn.selected {
+            background-color: #e5e7eb;
+            border-color: #9ca3af;
+            color: #111;
+        }
+
+        .emoji-grid {
+            display: flex;
+            justify-content: space-between;
+            padding: 0 5px;
+            width: 100%;
+        }
+
+        .emoji-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: transform 0.2s;
+            flex: 1;
+        }
+
+        .emoji-icon {
+            font-size: 32px;
+            filter: grayscale(1);
+            opacity: 0.6;
+            transition: all 0.2s;
+        }
+
+        .emoji-item.selected .emoji-icon {
+            filter: grayscale(0);
+            opacity: 1;
+            transform: scale(1.2);
+        }
+
+        .emoji-label {
+            font-size: 10px;
+            font-weight: 700;
+            color: #9ca3af;
+            text-transform: uppercase;
+            text-align: center;
+        }
+
+        .emoji-item.selected .emoji-label {
+            color: #111;
+        }
+
+        .range-slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 10px;
+            border-radius: 10px;
+            background: #d1d5db;
+            outline: none;
+            margin: 15px 0;
+        }
+
+        .range-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #000;
+            cursor: pointer;
+            border: 4px solid white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        textarea {
+            width: 100%;
+            border: 1px solid #d1d5db;
+            border-radius: 20px;
+            padding: 20px; 
+            min-height: 120px;
+            resize: none;
+            background-color: white;
+            font-size: 15px;
+            text-align: left;
+            line-height: 1.5;
+            box-sizing: border-box;
+        }
+
+        .submit-btn {
+            background: #000;
+            color: white;
+            width: 100%;
+            padding: 20px;
+            border-radius: 20px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 15px;
+            border: none;
+        }
+
+        .nav-bar {
+            padding: 10px 24px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #f0f0f0;
+            position: sticky;
+            bottom: 0;
+            background: white;
+            z-index: 50;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            cursor: pointer;
+        }
+
+        .nav-icon-img {
+            width: 24px;
+            height: 24px;
+            filter: grayscale(1) opacity(0.4);
+        }
+
+        .nav-item.active-shop {
+            background-color: #ff3b30;
+            border-radius: 50%;
+            width: 54px;
+            height: 54px;
+            margin-top: -35px;
+            box-shadow: 0 6px 15px rgba(255, 59, 48, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-item.active-shop .nav-icon-img {
+            filter: brightness(0) invert(1);
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+
+<div class="mobile-container">
+    <div class="header">
+        <div class="flex justify-between items-center">
+            <div class="bg-black w-10 h-10 rounded-full flex items-center justify-center text-white font-black text-xl">C</div>
+            <div class="text-3xl text-black">☰</div>
+        </div>
+        <p class="mt-8 font-bold text-gray-400 uppercase text-xs tracking-widest">Tu entrega de Commando</p>
+        <h1>¡Hola, Pablo!<br>¿Qué tal tu experiencia de entrega?</h1>
+    </div>
+
+    <div class="gradient-banner">
+        <p class="text-sm font-bold opacity-90 uppercase tracking-wide">Califica tu entrega de Commando</p>
+    </div>
+
+    <div class="questions-container">
+        <form id="feedbackForm" onsubmit="return handleSubmit(event)">
+            
+            <div class="card">
+                <label class="question-label">1. ¿Tu pedido llegó a tiempo?</label>
+                <div class="options-grid">
+                    <div class="option-btn" onclick="selectOption(this)">Sí</div>
+                    <div class="option-btn" onclick="selectOption(this)">No</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <label class="question-label">2. ¿Cómo calificarías la entrega?</label>
+                <div class="emoji-grid">
+                    <div class="emoji-item" onclick="selectEmoji(this)">
+                        <span class="emoji-icon">😡</span><span class="emoji-label">Pésimo</span>
+                    </div>
+                    <div class="emoji-item" onclick="selectEmoji(this)">
+                        <span class="emoji-icon">😟</span><span class="emoji-label">Malo</span>
+                    </div>
+                    <div class="emoji-item" onclick="selectEmoji(this)">
+                        <span class="emoji-icon">😐</span><span class="emoji-label">Regular</span>
+                    </div>
+                    <div class="emoji-item" onclick="selectEmoji(this)">
+                        <span class="emoji-icon">🙂</span><span class="emoji-label">Bueno</span>
+                    </div>
+                    <div class="emoji-item" onclick="selectEmoji(this)">
+                        <span class="emoji-icon">🤩</span><span class="emoji-label">Excelente</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <label class="question-label">3. ¿Qué tan fácil fue comprar en nuestro sitio?</label>
+                <div class="emoji-grid">
+                    <div class="emoji-item" onclick="selectEmoji(this)">
+                        <span class="emoji-icon">😡</span><span class="emoji-label">Pésimo</span>
+                    </div>
+                    <div class="emoji-item" onclick="selectEmoji(this)">
+                        <span class="emoji-icon">😟</span><span class="emoji-label">Malo</span>
+                    </div>
+                    <div class="emoji-item" onclick="selectEmoji(this)">
+                        <span class="emoji-icon">😐</span><span class="emoji-label">Regular</span>
+                    </div>
+                    <div class="emoji-item" onclick="selectEmoji(this)">
+                        <span class="emoji-icon">🙂</span><span class="emoji-label">Bueno</span>
+                    </div>
+                    <div class="emoji-item" onclick="selectEmoji(this)">
+                        <span class="emoji-icon">🤩</span><span class="emoji-label">Excelente</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <label class="question-label">4. ¿Encontraste lo que buscabas fácilmente?</label>
+                <div class="options-grid">
+                    <div class="option-btn" onclick="selectOption(this)">Sí</div>
+                    <div class="option-btn" onclick="selectOption(this)">No</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <label class="question-label">5. ¿El producto cumplió tus expectativas?</label>
+                <div class="options-grid">
+                    <div class="option-btn" onclick="selectOption(this)">Sí</div>
+                    <div class="option-btn" onclick="selectOption(this)">Parcialmente</div>
+                    <div class="option-btn" onclick="selectOption(this)">No</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <label class="question-label">6. ¿La talla fue correcta?</label>
+                <div class="options-grid">
+                    <div class="option-btn" onclick="selectOption(this)">Sí</div>
+                    <div class="option-btn" onclick="selectOption(this)">No</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <label class="question-label">7. ¿La experiencia reflejó lo que esperas de la marca?</label>
+                <div class="options-grid">
+                    <div class="option-btn" onclick="selectOption(this)">Sí</div>
+                    <div class="option-btn" onclick="selectOption(this)">Más o menos</div>
+                    <div class="option-btn" onclick="selectOption(this)">No</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <label class="question-label">8. ¿Volverías a comprar con nosotros?</label>
+                <div class="options-grid">
+                    <div class="option-btn" onclick="selectOption(this)">Sí</div>
+                    <div class="option-btn" onclick="selectOption(this)">Tal vez</div>
+                    <div class="option-btn" onclick="selectOption(this)">No</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <label class="question-label">9. ¿Qué tan probable es que nos recomiendes?</label>
+                <div class="range-container py-2">
+                    <input type="range" id="nps-range" min="0" max="10" value="10" class="range-slider">
+                    <div class="flex justify-between text-[10px] font-bold text-gray-400 mt-2 uppercase tracking-tighter">
+                        <span>Nada probable</span>
+                        <span>Muy probable</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <label class="question-label">10. ¿Qué deberíamos mejorar?</label>
+                <textarea placeholder="Tus comentarios nos ayudan a crecer..."></textarea>
+                <button type="submit" class="submit-btn">Enviar feedback</button>
+            </div>
+
+        </form>
+    </div>
+
+    <div class="nav-bar">
+        <div class="nav-item">
+            <img src="https://img.icons8.com/material-outlined/48/000000/home--v2.png" alt="Inicio" class="nav-icon-img">
+        </div>
+        <div class="nav-item">
+            <img src="https://img.icons8.com/material-outlined/48/000000/search--v1.png" alt="Buscar" class="nav-icon-img">
+        </div>
+        <div class="nav-item active-shop">
+            <img src="https://img.icons8.com/material-outlined/48/000000/t-shirt.png" alt="Tienda" class="nav-icon-img">
+        </div>
+        <div class="nav-item">
+            <img src="https://img.icons8.com/material-outlined/48/000000/shopping-bag--v1.png" alt="Carrito" class="nav-icon-img">
+        </div>
+        <div class="nav-item">
+            <img src="https://img.icons8.com/material-outlined/48/000000/user--v1.png" alt="Perfil" class="nav-icon-img">
+        </div>
+    </div>
+</div>
+
+<script>
+    function selectOption(el) {
+        const parent = el.parentElement;
+        parent.querySelectorAll('.option-btn').forEach(btn => btn.classList.remove('selected'));
+        el.classList.add('selected');
+    }
+
+    function selectEmoji(el) {
+        const parent = el.parentElement;
+        parent.querySelectorAll('.emoji-item').forEach(item => item.classList.remove('selected'));
+        el.classList.add('selected');
+    }
+
+    function handleSubmit(e) {
+        e.preventDefault();
+        const btn = e.target.querySelector('.submit-btn');
+        btn.innerText = 'ENVIANDO...';
+        btn.disabled = true;
+        btn.style.opacity = '0.7';
+        
+        setTimeout(() => {
+            btn.innerText = '¡GRACIAS!';
+        }, 1500);
+        return false;
+    }
+</script>
+
+</body>
+</html>
